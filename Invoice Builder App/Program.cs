@@ -1,10 +1,13 @@
 using Invoice_Builder_App.Components;
+using Invoice_Builder_App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<CustomerService>();
 
 var app = builder.Build();
 

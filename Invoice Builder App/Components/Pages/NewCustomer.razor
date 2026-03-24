@@ -1,6 +1,8 @@
 ﻿@page "/new-customer"
 @using Invoice_Builder_App.Models
+@using Invoice_Builder_App.Services
 @rendermode InteractiveServer
+@inject CustomerService customerService
 <h3>NewCustomer</h3>
 
 <EditForm Model="newCustomer" OnValidSubmit="SaveCustomer" FormName="CustomerForm">
@@ -44,20 +46,34 @@
 
 </EditForm>
 
-<div>
-    <ul>
-        @foreach (var item in Customers)
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in customerService.GetCustomers())
         {
-            <li>@item.User.UserName</li>
+            <tr>
+                <td>
+                    @item.User.UserName
+                </td>
+                <td>
+                    @item.User.UserCompany
+                </td>
+                <td>
+                    @item.Email
+                </td>
+            </tr>
         }
-    </ul>
-
-</div>
+    </tbody>
+</table>
 
 @code
 {
-    public List<Customer> Customers = new();
-
     public Customer newCustomer = new()
     {
         Tax = new TaxInfo(),
@@ -67,7 +83,7 @@
     public void SaveCustomer()
     {
         Console.WriteLine($"The user with name{newCustomer.User.UserName} has been saved!");
-        Customers.Add(newCustomer);
+        customerService.AddCustomer(newCustomer);
         newCustomer = new()
         {
             Tax = new TaxInfo(),
