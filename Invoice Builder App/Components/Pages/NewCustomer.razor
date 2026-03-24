@@ -1,0 +1,77 @@
+﻿@page "/new-customer"
+@using Invoice_Builder_App.Models
+@rendermode InteractiveServer
+<h3>NewCustomer</h3>
+
+<EditForm Model="newCustomer" OnValidSubmit="SaveCustomer" FormName="CustomerForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <div>
+        <label>Email Address</label>
+        <InputText @bind-Value="newCustomer.Email" />
+    </div>
+    <div>
+        <label>Postal Code</label>
+        <InputText @bind-Value="newCustomer.PostalCode" />
+    </div>
+    <div>
+        <label>Tax Id</label>
+        <InputText @bind-Value="newCustomer.Tax.TaxId" />
+    </div>
+    <div>
+        <label>Tax Rate</label>
+        <InputNumber @bind-Value="newCustomer.Tax.TaxRate" />
+    </div>
+    <div>
+        <label>Address</label>
+        <InputText @bind-Value="newCustomer.Address" />
+    </div>
+    <div>
+        <label>Use Company</label>
+        <InputText @bind-Value="newCustomer.User.UserCompany" />
+    </div>
+    <div>
+        <label>User Name</label>
+        <InputText @bind-Value="newCustomer.User.UserName" />
+    </div>
+    <div>
+        <label>Bank Details</label>
+        <InputText @bind-Value="newCustomer.BankDetails" />
+    </div>
+    
+    <button type="submit">Create Customer</button>
+
+</EditForm>
+
+<div>
+    <ul>
+        @foreach (var item in Customers)
+        {
+            <li>@item.User.UserName</li>
+        }
+    </ul>
+
+</div>
+
+@code
+{
+    public List<Customer> Customers = new();
+
+    public Customer newCustomer = new()
+    {
+        Tax = new TaxInfo(),
+        User = new UserInfo()
+    };
+
+    public void SaveCustomer()
+    {
+        Console.WriteLine($"The user with name{newCustomer.User.UserName} has been saved!");
+        Customers.Add(newCustomer);
+        newCustomer = new()
+        {
+            Tax = new TaxInfo(),
+            User = new UserInfo()
+        };
+    }
+}
